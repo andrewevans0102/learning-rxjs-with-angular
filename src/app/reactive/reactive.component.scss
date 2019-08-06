@@ -1,0 +1,50 @@
+.post-title {
+  font-size: 1.25em;
+}
+.post-content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+.post-metadata {
+  margin-left: 1em;
+  max-width: 40em;
+}
+p {
+  margin: 0;
+}
+.post-container {
+  margin: 1em;
+}
+.post-publish {
+  font-weight: 800;
+  color: #62c462;
+}
+.post-source {
+  font-weight: 800;
+  color: #5bc0de;
+}
+i {
+  font-size: 4em;
+}
+.post-categories {
+  color: #00bc8c;
+}
+a {
+  color: orange;
+}
+.load-button {
+  background-color: blue;
+  margin: 1em;
+}
+.clear-button {
+  background-color: red;
+  margin: 1em;
+}
+// .show-spinner {
+//   stroke: #3fb53f;
+// }
+.show-spinner ::ng-deep .mat-progress-spinner circle, .mat-spinner circle {
+  stroke: white;
+}
