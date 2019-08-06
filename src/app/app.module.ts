@@ -13,15 +13,15 @@ import { HttpClientModule } from '@angular/common/http';
     [ 
       BrowserModule, 
       FormsModule, 
-      MaterialModule 
+      MaterialModule,
+      HttpClientModule
     ],
   declarations: 
     [ 
       AppComponent, 
       HelloComponent, 
       TraditionalComponent, 
-      ReactiveComponent,
-      HttpClientModule
+      ReactiveComponent
     ],
   bootstrap:    
     [ 
