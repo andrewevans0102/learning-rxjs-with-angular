@@ -51,6 +51,7 @@ export class TraditionalComponent {
 
   clear() {
     this.posts = [];
+    this.showSpinner = false;
   }
 
 }
