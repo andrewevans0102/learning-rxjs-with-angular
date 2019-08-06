@@ -1,0 +1,19 @@
+<button mat-button (click)="load()" class="load-button">Load</button>
+<button mat-button (click)="clear()" class="clear-button">Clear</button>
+<div *ngIf="posts.length > 0; else elseBlock">
+  <div class="post-container" *ngFor="let post of posts">
+    <div class="post-content">
+      <div class="post-title"><a href='{{post.link}}'>{{ post.title }}</a></div>
+      <div class="post-metadata">
+        <p class="post-publish">{{ post.pubDate }}</p>
+        <p class="post-source">{{ post.sourceURL }}</p>
+        <p class="post-categories" *ngIf="post.categories !== undefined">{{ post.categories.join(', ') }}</p>
+        <p *ngIf="post.contentSnippet">{{ post.contentSnippet }}...<a href="{{post.link}}">[click here to read more]</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #elseBlock>
+  <mat-spinner color="accent" *ngIf="showSpinner === true"></mat-spinner>
+  <h2 *ngIf="this.posts.length === 0 && showSpinner === false">No posts are loaded!</h2>
+</ng-template>
