@@ -6,6 +6,7 @@ import { HelloComponent } from './hello.component';
 import { TraditionalComponent } from './traditional/traditional.component';
 import { ReactiveComponent } from './reactive/reactive.component';
 import { MaterialModule } from './material/material.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports:      
@@ -19,7 +20,8 @@ import { MaterialModule } from './material/material.module';
       AppComponent, 
       HelloComponent, 
       TraditionalComponent, 
-      ReactiveComponent 
+      ReactiveComponent,
+      HttpClientModule
     ],
   bootstrap:    
     [ 
