@@ -60,7 +60,7 @@ app.get('/traditional', (req, res) => {
 
       // helper function that calls the rss-parser npm module
       async function callRSS(input, output) {
-        const response = await parser.parseURL(input.sourceURL)
+        const response = await parser.parseURL(input.sourceURL);
         response.items.forEach(item => {
             // when categories is undefined that is normally a comment or other type of post
             if(item.categories !== undefined || item.link.includes('dev.to')) {
