@@ -73,12 +73,12 @@ export class ReactiveComponent {
 
               this.output.push({
                 ...post, 
-                sort1: inputDate.getTime()
+                sortDate: inputDate.getTime()
               });
             });
 
             this.output.sort((a: any, b: any) => {
-              return b.sort1 - a.sort1;
+              return b.sortDate - a.sortDate;
             });
 
             return this.output;

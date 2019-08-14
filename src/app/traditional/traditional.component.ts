@@ -25,25 +25,37 @@ export class TraditionalComponent {
     // all of the rss feeds and waiting (synchronously) for them to complete
     this.posts = [];
     const response = await axios.get(environment.traditionalEndpoint);
+    response.data.forEach((entry) => {
+      const inputDate = new Date(entry.pubDate);
+      entry.pubDate = inputDate.toLocaleDateString('en-us') + ' at ' + inputDate.toLocaleTimeString('en-us');
+      
+      this.posts.push({
+        ...entry, 
+        sortDate: inputDate.getTime()
+      });
+    });
     this.posts = response.data;
 
     // retrieve the manual entries
     const manualEntries: any
       = await axios.get(environment.manualEntries);
     manualEntries.data.forEach((entry: any) => {
+      const inputDate = new Date(entry.pubDate);
+      entry.pubDate = inputDate.toLocaleDateString('en-us') + ' at ' + inputDate.toLocaleTimeString('en-us');
       if (entry.contentSnippet.length > 200) {
         entry.contentSnippet = entry.contentSnippet.substring(0, 200);
       }
-      this.posts.push(entry);
+
+      this.posts.push({
+        ...entry, 
+        sortDate: inputDate.getTime()
+      });
     });
 
     // sort by date here
     this.posts.sort((a: any, b: any) => {
-      // https://stackoverflow.com/questions/10123953/sort-javascript-object-array-by-date
-        const aDate = new Date(b.sortDate);
-        const bDate = new Date(a.sortDate);
-        return bDate.getMilliseconds() - aDate.getMilliseconds();
-      });
+      return b.sortDate - a.sortDate;
+    });
 
     // stop showing spinner when fetch completes
     this.showSpinner = false;

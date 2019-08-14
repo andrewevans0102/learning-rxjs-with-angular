@@ -42,8 +42,6 @@ app.get('/traditional', (req, res) => {
       }
 
       output.forEach((post) => {
-        post.pubDate = formatDate(post.pubDate);
-
         if(post.sourceURL === 'https://blog.angularindepth.com/feed') {
           post.sourceURL = "Angular-In-Depth";
         } else if (post.sourceURL === 'https://itnext.io/feed') {
@@ -59,12 +57,6 @@ app.get('/traditional', (req, res) => {
 
       // send an HTTP 200 with the output array here
       res.status(200).send(output);
-
-      // helper function for date formatting
-      function formatDate(input) {
-        const inputDate = new Date(input);
-        return inputDate.toLocaleDateString('en-us') + ' at ' + inputDate.toLocaleTimeString('en-us');
-      }
 
       // helper function that calls the rss-parser npm module
       async function callRSS(input, output) {
