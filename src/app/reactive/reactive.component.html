@@ -1,6 +1,6 @@
 <button mat-button (click)="load()" class="load-button">Load</button>
 <button mat-button (click)="clear()" class="clear-button">Clear</button>
-<div *ngIf="posts$ | async as posts; else elseBlock">
+<div *ngIf="posts$ | async as posts">
   <div class="post-container" *ngFor="let post of posts">
     <div class="post-content">
       <div class="post-title"><a href='{{post.link}}'>{{ post.title }}</a></div>
@@ -13,6 +13,3 @@
     </div>
   </div>
 </div>
-<ng-template #elseBlock>
-  <h2 *ngIf="this.posts$ === undefined">No posts are loaded!</h2>
-</ng-template>
