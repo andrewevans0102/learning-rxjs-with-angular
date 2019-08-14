@@ -1,0 +1,61 @@
+
+
+[{
+    "sourceURL": "Angular-In-Depth",
+    "creator": "Andrew Evans",
+    "title": "The Angular DevOps Series: Deploying to Firebase with CircleCI",
+    "link": "https://blog.angularindepth.com/deploying-an-angular-site-to-firebase-with-circleci-ed881cb6a2fa",
+    "pubDate": "Wed, 26 Dec 2018 12:00:00 GMT",
+    "sortDate": "Wed, 26 Dec 2018 12:00:00 GMT",
+    "contentSnippet": "If you’ve done anything in web development in the past year, you’ve undoubtedly heard of CircleCI and Firebase. Both technologies are becoming increasingly popular as alternatives to Jenkins, AWS, and other older platforms. I’ve had a great experience with both, and am going to walk through how to use them with Angular. →",
+    "categories": ["javascript", "cloud-computing", "firebase", "angular"]
+  },
+  {
+    "sourceURL": "Angular-In-Depth",
+    "creator": "Andrew Evans",
+    "title": "How the AngularFire Library makes Firebase feel like Magic",
+    "link": "https://blog.angularindepth.com/how-the-angular-fire-library-makes-firebase-feel-like-magic-1fda375966bb",
+    "pubDate": "Wed, 30 Jan 2019 12:00:00 GMT",
+    "contentSnippet": "I’ve been working a lot recently with Google’s Firebase to build out a few side projects, and I wanted to write about my experience. The Firebase Platform is really powerful, and provides services that cover most of your application needs. It has services for Hosting, Authentication, Database Storage, File Storage, and more. In order to use these services, you can build out a Node Express setup or even make use of Firebase Cloud Functions and build out an API….or there’s an even easier method to do this with the AngularFire Library. →",
+    "categories": ["javascript", "cloud-computing", "firebase", "angular"]
+  },
+  {
+    "sourceURL": "Angular-In-Depth",
+    "creator": "Andrew Evans",
+    "title": "How to Start Flying with Angular and NgRx",
+    "link": "https://blog.angularindepth.com/how-to-start-flying-with-angular-and-ngrx-b18e84d444aa",
+    "pubDate": "Tue, 19 Mar 2019 12:00:00 GMT",
+    "sortDate": "Tue, 19 Mar 2019 12:00:00 GMT",
+    "contentSnippet": "One of the biggest challenges with any application is managing data. In the world of Angular, there are a lot of patterns to follow to manage your application. These typically involve using decorators like Input and Output, or things like RxJs Observables to watch for data changes. However, there is a reactive state technology that solves this challenge called NgRx. →",
+    "categories": ["javascript", "cloud-computing", "firebase", "angular"]
+  },
+  {
+    "sourceURL": "ITNext",
+    "creator": "Andrew Evans",
+    "title": "Why Building with a JAMstack is Awesome",
+    "link": "https://itnext.io/why-building-with-a-jamstack-is-awesome-39696e9ef8d6",
+    "pubDate": "Fri, 17 May 2019 12:00:00 GMT",
+    "sortDate": "Fri, 17 May 2019 12:00:00 GMT",
+    "contentSnippet": "At this year’s NG-Conf, John Papa gave a talk about ngrx-data, as well as the JAMstack. This talk highlighted a lot of cool things about building apps with a JAMstack, and why it greatly improves development for engineers. So now I’m sure you’re asking yourself, what is a JAM stack? Well, it’s really a name →",
+    "categories": ["javascript", "cloud-computing", "firebase", "angular"]
+  },
+  {
+    "sourceURL": "ITNext",
+    "creator": "Andrew Evans",
+    "title": "Morse Code and the Web Audio APIs",
+    "link": "https://itnext.io/morse-code-and-the-web-audio-apis-594fea0ddb2b",
+    "pubDate": "Wed, 5 Jun 2019 12:00:00 GMT",
+    "sortDate": "Wed, 5 Jun 2019 12:00:00 GMT",
+    "contentSnippet": "In the computer science world, Morse Code is one of those old-timey technologies that’s still cool. We’ve all watched movies about WWII where governments send telegraphs using Morse Code to transmit messages across huge distances. We’ve probably also watched Navy movies where ship commanders are sending the famous “SOS” when a ship is in trouble. This technology was ground-breaking when it was developed, and it’s still relevant today. →",
+    "categories": ["javascript", "angular", "web audio API", "sound"]
+  },
+  {
+    "sourceURL": "Angular-In-Depth",
+    "creator": "Andrew Evans",
+    "title": "How Cypress Makes Testing Fun",
+    "link": "https://blog.angularindepth.com/how-cypress-makes-testing-fun-a56da1294285",
+    "pubDate": "Fri, 7 Jun 2019 12:00:00 GMT",
+    "sortDate": "Fri, 7 Jun 2019 12:00:00 GMT",
+    "contentSnippet": "Tony Stark using Cypress to test his Iron Man suit (image source) Recently, I worked through implementing Cypress e2e testing on my application the overwatch-challenge. I was really impressed",
+    "categories": ["javascript", "Angular", "Cypress", "Automated Testing", "Web Development"]
+  }]
