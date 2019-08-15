@@ -1,8 +1,19 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, merge, Subject } from 'rxjs';
-import { map, takeUntil, catchError } from 'rxjs/operators';
+import { map, takeUntil, catchError, scan } from 'rxjs/operators';
 import { environment } from '../environments/environment';
+
+interface Post {
+  sourceURL: string,
+  creator: string,
+  title: string,
+  link: string,
+  pubDate: string,
+  sortDate: number,
+  contentSnippet: string,
+  categories: string
+}
 
 @Component({
   selector: 'app-reactive',
@@ -12,7 +23,6 @@ import { environment } from '../environments/environment';
 export class ReactiveComponent {
 
   posts$: Observable<any>;
-  output = [];
   unsubscribe: Subject<void> = new Subject();
 
   constructor(public http: HttpClient) { }
@@ -50,14 +60,14 @@ export class ReactiveComponent {
         })
       );
 
-    try {
-      this.posts$ =
-        merge(medium, wordpress, devto, manualEntries)
-          .pipe(takeUntil(this.unsubscribe))
-          .pipe(map((response: []) => {
-            response.forEach((post: any) => {
+    this.posts$ =
+      merge(medium, wordpress, devto, manualEntries)
+        .pipe(
+          scan((output: Post[], response: []) => {
+            response.forEach((post: Post) => {
               const inputDate = new Date(post.pubDate);
               post.pubDate = inputDate.toLocaleDateString('en-us') + ' at ' + inputDate.toLocaleTimeString('en-us');
+              post.sortDate = inputDate.getTime();
 
               if (post.sourceURL === 'https://blog.angularindepth.com/feed') {
                 post.sourceURL = 'Angular-In-Depth';
@@ -70,34 +80,26 @@ export class ReactiveComponent {
               } else if (post.sourceURL === 'https://dev.to/feed/andrewevans0102') {
                 post.sourceURL = 'DEV.TO';
               }
+              output.push(post);
+            })
 
-              this.output.push({
-                ...post, 
-                sortDate: inputDate.getTime()
-              });
-            });
-
-            this.output.sort((a: any, b: any) => {
+            output.sort((a: any, b: any) => {
               return b.sortDate - a.sortDate;
             });
 
-            return this.output;
-          }));
-    } catch (error) {
-      console.log('error');
-      console.log(error);
-    }
+            return output;
+        }, []),
+        catchError(err => {
+          throw 'error in source observable. Message: ' + err.message;
+        }),
+        takeUntil(this.unsubscribe)
+      );
   }
 
   clear() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
     this.posts$ = null;
-    this.output = [];
-  }
-
-  handleError(endpoint: string) {
-    return 'error occured when calling ' + endpoint;
   }
 
 }

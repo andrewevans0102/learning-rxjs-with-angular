@@ -83,6 +83,7 @@ app.get('/traditional', (req, res) => {
                   title: item.title,
                   link: item.link,
                   pubDate: item.pubDate,
+                  sortDate: item.pubDate.getTime(),
                   contentSnippet: snippet,
                   categories: item.categories
               };
