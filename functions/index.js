@@ -32,7 +32,37 @@ app.get('/traditional', (req, res) => {
       ];
       const promises = [];
       feedInput.forEach((feed) => {
-        promises.push(callRSS(feed, output));
+        // add all rss-parser calls as promises
+        promises.push(parser.parseURL(feed.sourceURL)
+          .then((response) => {
+            response.items.forEach((item) => {
+              let snippet = '';
+              if(item.link.includes('dev.to')) {
+                  snippet = striptags(item['content']);
+              } else {
+                  snippet = striptags(item['content:encoded']);
+              }
+    
+              if(snippet !== undefined) {
+                  if(snippet.length > 200) {
+                      snippet = snippet.substring(0, 200);
+                  }
+              }
+
+              const outputItem = {
+                sourceURL: feed.sourceURL,
+                creator: item.creator,
+                title: item.title,
+                link: item.link,
+                pubDate: item.pubDate,
+                contentSnippet: snippet,
+                categories: item.categories
+              };
+              output.push(outputItem);
+            })
+          })
+          .catch((error) => console.log(error))
+        );
       });
 
       try {
@@ -57,40 +87,6 @@ app.get('/traditional', (req, res) => {
 
       // send an HTTP 200 with the output array here
       res.status(200).send(output);
-
-      // helper function that calls the rss-parser npm module
-      async function callRSS(input, output) {
-        const response = await parser.parseURL(input.sourceURL);
-        response.items.forEach(item => {
-            // when categories is undefined that is normally a comment or other type of post
-            if(item.categories !== undefined || item.link.includes('dev.to')) {
-              let snippet = '';
-              if(item.link.includes('dev.to')) {
-                  snippet = striptags(item['content']);
-              } else {
-                  snippet = striptags(item['content:encoded']);
-              }
-
-              if(snippet !== undefined) {
-                  if(snippet.length > 200) {
-                      snippet = snippet.substring(0, 200);
-                  }
-              }
-
-              const outputItem = {
-                  sourceURL: input.sourceURL,
-                  creator: item.creator,
-                  title: item.title,
-                  link: item.link,
-                  pubDate: item.pubDate,
-                  sortDate: item.pubDate.getTime(),
-                  contentSnippet: snippet,
-                  categories: item.categories
-              };
-              output.push(outputItem);
-            }
-        });
-      }
     })();
 });
 
