@@ -1,52 +1,54 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-const express = require('express');
-const cors = require('cors');
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const express = require("express");
+const cors = require("cors");
 const app = express();
 app.use(cors({ origin: true }));
 // app will run on port 3000 locally
 const port = 3000;
-const Parser = require('rss-parser');
+const Parser = require("rss-parser");
 const parser = new Parser({
-    customFields: {
-        item: [ 'creator', 'title', 'link', 'pubDate', 'content:encoded', 'content']
-    }
+  customFields: {
+    item: ["creator", "title", "link", "pubDate", "content:encoded", "content"],
+  },
 });
-const striptags = require('striptags');
+const striptags = require("striptags");
 
 // endpoint that retrieves the posts with the traditional fetch/promise method
-app.get('/traditional', (req, res) => {
+app.get("/traditional", (req, res) => {
   (async () => {
-      const output = [];
-      // feed addresses to use in call to rss parser
-      let feedInput = [
-          {
-            sourceURL: "https://medium.com/feed/@Andrew_Evans"
-          },
-          {
-            sourceURL: "https://rhythmandbinary.com/feed"
-          },
-          {
-            sourceURL: 'https://dev.to/feed/andrewevans0102'
-          }
-      ];
-      const promises = [];
-      feedInput.forEach((feed) => {
-        // add all rss-parser calls as promises
-        promises.push(parser.parseURL(feed.sourceURL)
+    const output = [];
+    // feed addresses to use in call to rss parser
+    let feedInput = [
+      {
+        sourceURL: "https://medium.com/feed/@Andrew_Evans",
+      },
+      {
+        sourceURL: "https://rhythmandbinary.com/rss.xml",
+      },
+      {
+        sourceURL: "https://dev.to/feed/andrewevans0102",
+      },
+    ];
+    const promises = [];
+    feedInput.forEach((feed) => {
+      // add all rss-parser calls as promises
+      promises.push(
+        parser
+          .parseURL(feed.sourceURL)
           .then((response) => {
             response.items.forEach((item) => {
-              let snippet = '';
-              if(item.link.includes('dev.to')) {
-                  snippet = striptags(item['content']);
+              let snippet = "";
+              if (item.link.includes("dev.to")) {
+                snippet = striptags(item["content"]);
               } else {
-                  snippet = striptags(item['content:encoded']);
+                snippet = striptags(item["content:encoded"]);
               }
-    
-              if(snippet !== undefined) {
-                  if(snippet.length > 200) {
-                      snippet = snippet.substring(0, 200);
-                  }
+
+              if (snippet !== undefined) {
+                if (snippet.length > 200) {
+                  snippet = snippet.substring(0, 200);
+                }
               }
 
               const outputItem = {
@@ -56,87 +58,87 @@ app.get('/traditional', (req, res) => {
                 link: item.link,
                 pubDate: item.pubDate,
                 contentSnippet: snippet,
-                categories: item.categories
+                categories: item.categories,
               };
               output.push(outputItem);
-            })
+            });
           })
           .catch((error) => console.log(error))
-        );
-      });
+      );
+    });
 
-      try {
-        await Promise.all(promises);
-      } catch (error) {
-        res.status(500).send(error);
+    try {
+      await Promise.all(promises);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+
+    output.forEach((post) => {
+      if (post.sourceURL === "https://blog.angularindepth.com/feed") {
+        post.sourceURL = "Angular-In-Depth";
+      } else if (post.sourceURL === "https://itnext.io/feed") {
+        post.sourceURL = "ITNext";
+      } else if (post.sourceURL === "https://medium.com/feed/@Andrew_Evans") {
+        post.sourceURL = "Medium";
+      } else if (post.sourceURL === "https://rhythmandbinary.com/feed") {
+        post.sourceURL = "Rhythm and Binary";
+      } else if (post.sourceURL === "https://dev.to/feed/andrewevans0102") {
+        post.sourceURL = "DEV.TO";
       }
+    });
 
-      output.forEach((post) => {
-        if(post.sourceURL === 'https://blog.angularindepth.com/feed') {
-          post.sourceURL = "Angular-In-Depth";
-        } else if (post.sourceURL === 'https://itnext.io/feed') {
-          post.sourceURL = 'ITNext';
-        } else if (post.sourceURL === 'https://medium.com/feed/@Andrew_Evans') {
-          post.sourceURL = 'Medium';
-        } else if (post.sourceURL === 'https://rhythmandbinary.com/feed') {
-          post.sourceURL = 'Rhythm and Binary';
-        } else if (post.sourceURL === 'https://dev.to/feed/andrewevans0102') {
-          post.sourceURL = 'DEV.TO';
-        }
-      });
-
-      // send an HTTP 200 with the output array here
-      res.status(200).send(output);
-    })();
+    // send an HTTP 200 with the output array here
+    res.status(200).send(output);
+  })();
 });
 
 // endpoint that retrieves the posts as single HTTP requests
 // these requests are aggreagated by the client with RxJS operators and Observables
-app.get('/reactive/:source', (req, res) => {
+app.get("/reactive/:source", (req, res) => {
   (async () => {
-    try{
+    try {
       const output = [];
-      let sourceURL = '';
-      if(req.params.source === 'medium') {
-        sourceURL = 'https://medium.com/feed/@Andrew_Evans';
-      } else if (req.params.source === 'wordpress'){
-        sourceURL = 'https://rhythmandbinary.com/feed';
-      } else if (req.params.source === 'devto'){
-        sourceURL = 'https://dev.to/feed/andrewevans0102';
+      let sourceURL = "";
+      if (req.params.source === "medium") {
+        sourceURL = "https://medium.com/feed/@Andrew_Evans";
+      } else if (req.params.source === "wordpress") {
+        sourceURL = "https://rhythmandbinary.com/rss.xml";
+      } else if (req.params.source === "devto") {
+        sourceURL = "https://dev.to/feed/andrewevans0102";
       }
 
-      const feedOutput = await parser.parseURL(sourceURL)
-      feedOutput.items.forEach(item => {
+      const feedOutput = await parser.parseURL(sourceURL);
+      feedOutput.items.forEach((item) => {
         // when categories is undefined that is normally a comment or other type of post
-        if(item.categories !== undefined || item.link.includes('dev.to')) {
-          let snippet = '';
-          if(item.link.includes('dev.to')) {
-              snippet = striptags(item['content']);
+        if (item.categories !== undefined || item.link.includes("dev.to")) {
+          let snippet = "";
+          if (item.link.includes("dev.to")) {
+            snippet = striptags(item["content"]);
           } else {
-              snippet = striptags(item['content:encoded']);
+            snippet = striptags(item["content:encoded"]);
           }
 
-          if(snippet !== undefined) {
-              if(snippet.length > 200) {
-                  snippet = snippet.substring(0, 200);
-              }
+          if (snippet !== undefined) {
+            if (snippet.length > 200) {
+              snippet = snippet.substring(0, 200);
+            }
           }
 
           const outputItem = {
-              sourceURL: sourceURL,
-              creator: item.creator,
-              title: item.title,
-              link: item.link,
-              pubDate: item.pubDate,
-              contentSnippet: snippet,
-              categories: item.categories
+            sourceURL: sourceURL,
+            creator: item.creator,
+            title: item.title,
+            link: item.link,
+            pubDate: item.pubDate,
+            contentSnippet: snippet,
+            categories: item.categories,
           };
           output.push(outputItem);
         }
       });
 
       res.status(200).send(output);
-    } catch(error) {
+    } catch (error) {
       res.status(500).send(error);
     }
   })();

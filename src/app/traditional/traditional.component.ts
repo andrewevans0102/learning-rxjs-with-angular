@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import axios from 'axios';
-import { environment } from '../environments/environment';
+import { Component } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import axios from "axios";
+import { environment } from "../../environments/environment";
 
 @Component({
-  selector: 'app-traditional',
-  templateUrl: './traditional.component.html',
-  styleUrls: ['./traditional.component.scss']
+  selector: "app-traditional",
+  templateUrl: "./traditional.component.html",
+  styleUrls: ["./traditional.component.scss"],
 })
 export class TraditionalComponent {
-
   posts = [];
   showSpinner: boolean;
 
@@ -27,28 +26,33 @@ export class TraditionalComponent {
     const response = await axios.get(environment.traditionalEndpoint);
     response.data.forEach((entry) => {
       const inputDate = new Date(entry.pubDate);
-      entry.pubDate = inputDate.toLocaleDateString('en-us') + ' at ' + inputDate.toLocaleTimeString('en-us');
-      
+      entry.pubDate =
+        inputDate.toLocaleDateString("en-us") +
+        " at " +
+        inputDate.toLocaleTimeString("en-us");
+
       this.posts.push({
-        ...entry, 
-        sortDate: inputDate.getTime()
+        ...entry,
+        sortDate: inputDate.getTime(),
       });
     });
     this.posts = response.data;
 
     // retrieve the manual entries
-    const manualEntries: any
-      = await axios.get(environment.manualEntries);
+    const manualEntries: any = await axios.get(environment.manualEntries);
     manualEntries.data.forEach((entry: any) => {
       const inputDate = new Date(entry.pubDate);
-      entry.pubDate = inputDate.toLocaleDateString('en-us') + ' at ' + inputDate.toLocaleTimeString('en-us');
+      entry.pubDate =
+        inputDate.toLocaleDateString("en-us") +
+        " at " +
+        inputDate.toLocaleTimeString("en-us");
       if (entry.contentSnippet.length > 200) {
         entry.contentSnippet = entry.contentSnippet.substring(0, 200);
       }
 
       this.posts.push({
-        ...entry, 
-        sortDate: inputDate.getTime()
+        ...entry,
+        sortDate: inputDate.getTime(),
       });
     });
 
@@ -65,5 +69,4 @@ export class TraditionalComponent {
     this.posts = [];
     this.showSpinner = false;
   }
-
 }

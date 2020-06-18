@@ -7,6 +7,7 @@ import { TraditionalComponent } from './traditional/traditional.component';
 import { ReactiveComponent } from './reactive/reactive.component';
 import { MaterialModule } from './material/material.module';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports:      
@@ -14,7 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
       BrowserModule, 
       FormsModule, 
       MaterialModule,
-      HttpClientModule
+      HttpClientModule,
+      BrowserAnimationsModule
     ],
   declarations: 
     [ 
